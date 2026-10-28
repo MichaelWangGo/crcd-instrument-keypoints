@@ -1,0 +1,125 @@
+{
+  "image_width": 1280,
+  "image_height": 720,
+  "playback_fps": 12,
+  "scope": "Framewise predictions with GT boxes and annotation-assisted identities; not an evaluated temporal tracker.",
+  "source_fps_verified": false,
+  "categories": {
+    "FBF": {
+      "id": 1,
+      "name": "FBF",
+      "supercategory": "",
+      "keypoints": [
+        "Head",
+        "Edge",
+        "Center",
+        "TipLeft",
+        "TipRight"
+      ],
+      "skeleton": [
+        [
+          2,
+          3
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          5
+        ]
+      ]
+    },
+    "PCH": {
+      "id": 2,
+      "keypoints": [
+        "LeftScrewBottom",
+        "LeftScrewTop",
+        "CentralScrew",
+        "StartHook",
+        "CentralHook",
+        "TipHook",
+        "RightScrewTop",
+        "RightScrewBottom"
+      ],
+      "name": "PCH",
+      "skeleton": [
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          8,
+          7
+        ],
+        [
+          7,
+          3
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          6
+        ]
+      ],
+      "supercategory": ""
+    }
+  },
+  "clips": [
+    {
+      "id": "steady",
+      "label": "相对稳定片段",
+      "frame_count": 120,
+      "first_source_frame": 2427,
+      "last_source_frame": 2546,
+      "mean_visible_error_px": 15.212352934409475,
+      "selection_window_quantile": 0.2,
+      "raw_video": "assets/video/steady-raw.mp4",
+      "overlay_video": "assets/video/steady-overlay.mp4",
+      "poster": "assets/images/steady-poster.jpg",
+      "data": "data/steady.json"
+    },
+    {
+      "id": "typical",
+      "label": "典型片段",
+      "frame_count": 120,
+      "first_source_frame": 245,
+      "last_source_frame": 364,
+      "mean_visible_error_px": 27.39279142434771,
+      "selection_window_quantile": 0.5,
+      "raw_video": "assets/video/typical-raw.mp4",
+      "overlay_video": "assets/video/typical-overlay.mp4",
+      "poster": "assets/images/typical-poster.jpg",
+      "data": "data/typical.json"
+    },
+    {
+      "id": "challenging",
+      "label": "困难片段",
+      "frame_count": 120,
+      "first_source_frame": 2811,
+      "last_source_frame": 2930,
+      "mean_visible_error_px": 56.289338744010884,
+      "selection_window_quantile": 0.9,
+      "raw_video": "assets/video/challenging-raw.mp4",
+      "overlay_video": "assets/video/challenging-overlay.mp4",
+      "poster": "assets/images/challenging-poster.jpg",
+      "data": "data/challenging.json"
+    }
+  ]
+}

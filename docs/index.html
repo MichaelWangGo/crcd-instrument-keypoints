@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Instrument Pose — 手术器械关键点与时序可视化</title>
+  <meta name="description" content="ViTPose++ 在 CRCD 上的真实实验：交互查看手术器械二维关键点、时序轨迹、独立测试指标与失败案例。">
+  <meta name="theme-color" content="#f5f6f1">
+  <meta property="og:title" content="Instrument Pose · CRCD">
+  <meta property="og:description" content="从单帧关键点到可探索的时序轨迹。真实预测，完整结果，公开展示。">
+  <meta property="og:image" content="https://michaelwanggo.github.io/crcd-instrument-keypoints/assets/images/steady-poster.jpg">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#viewer">跳转到交互查看器</a>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="Instrument Pose 首页"><span class="brand-mark"><i></i><i></i><i></i></span><span>instrument<span class="brand-light">pose</span></span><span class="brand-label">RESEARCH NOTE 01</span></a>
+    <nav aria-label="主导航"><a href="#viewer">时序查看</a><a href="#results">实验结果</a><a href="#method">方法与边界</a><a class="repo-link" href="https://github.com/MichaelWangGo/crcd-instrument-keypoints" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a></nav>
+  </header>
+
+  <main>
+    <section class="hero section-width">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="status-dot"></span> SURGICAL VISION / CRCD / ViTPose++</div>
+        <h1>从器械关键点，<br>看见<span class="accent-word">运动轨迹<svg viewBox="0 0 260 18" aria-hidden="true"><path d="M4 12Q110 0 256 8"/></svg></span>。</h1>
+        <p class="hero-description">把真实手术场景中的二维预测，变成可以播放、比较与逐帧检查的实验记录。</p>
+        <div class="hero-actions"><a class="button primary" href="#viewer">探索时序结果 <span aria-hidden="true">↓</span></a><a class="text-link" href="https://forge.coreweave.com/wandb/xu-wang-23/crcd-vitpose-plus/runs/2cx0caf6" target="_blank" rel="noopener">完整实验记录 ↗</a></div>
+        <div class="scope-badges"><span>逐帧二维估计</span><span>GT 器械框</span><span>独立测试场景</span></div>
+      </div>
+      <a class="hero-visual" href="#viewer" aria-label="查看手术器械关键点的交互演示">
+        <img src="assets/images/steady-poster.jpg" alt="CRCD 测试场景，双极钳和电凝钩上叠加真实关键点预测" width="1280" height="720" fetchpriority="high">
+        <div class="visual-topline"><span><i></i> HELD-OUT SEQUENCE</span><span>2 INSTRUMENTS</span></div>
+        <span class="visual-play" aria-hidden="true">▶</span>
+        <div class="visual-bottom"><span><b>FBF</b> Fenestrated bipolar forceps</span><span><b>PCH</b> Permanent cautery hook</span></div>
+      </a>
+    </section>
+
+    <section class="numbers section-width" aria-label="实验概览">
+      <div><span class="number-label">可见点平均误差 · 独立测试</span><strong>27.92<span> px</span></strong><p>两类器械等权宏平均</p></div>
+      <div><span class="number-label">有效测试实例</span><strong>6,149</strong><p>FBF 2,892 / PCH 3,257</p></div>
+      <div><span class="number-label">验证集选择的最佳轮次</span><strong>27<span> / 100</span></strong><p>选择时未使用测试结果</p></div>
+      <div class="number-note"><span class="note-arrow">↳</span><p>展示准确的结果，<br>也保留值得研究的失败。</p><a href="#results">查看误差分布 →</a></div>
+    </section>
+
+    <section id="viewer" class="viewer-section section-width">
+      <div class="section-heading"><div><div class="eyebrow">01 / TEMPORAL EXPLORER</div><h2>每一帧，都可以细看。</h2></div><p>切换预测与标注，沿着钳尖轨迹<br>观察定位的稳定性与失配。</p></div>
+      <div class="explorer">
+        <div class="explorer-main">
+          <div class="clip-tabs" role="tablist" aria-label="时序片段"><button role="tab" aria-selected="true" data-clip="steady">01 <span>相对稳定</span></button><button role="tab" aria-selected="false" data-clip="typical">02 <span>典型片段</span></button><button role="tab" aria-selected="false" data-clip="challenging">03 <span>困难片段</span></button></div>
+          <div class="video-stage" id="video-stage">
+            <video id="sequence-video" muted playsinline preload="metadata" poster="assets/images/steady-poster.jpg" aria-label="测试序列原始视频"></video>
+            <canvas id="pose-canvas" width="1280" height="720" aria-label="二维关键点预测和标注叠加层"></canvas>
+            <div class="stage-caption"><span id="stage-status">正在载入真实测试序列…</span><span id="stage-frame">FRAME —</span></div>
+            <div id="viewer-error" class="viewer-error" hidden></div>
+          </div>
+          <div class="playback">
+            <button class="play-button" id="play-button" aria-label="播放片段" disabled>▶</button>
+            <button class="step-button" id="prev-frame" aria-label="上一帧">‹</button>
+            <button class="step-button" id="next-frame" aria-label="下一帧">›</button>
+            <label class="sr-only" for="frame-slider">选择样本帧</label><input id="frame-slider" type="range" min="0" max="119" value="0" step="1">
+            <span class="frame-counter" id="frame-counter">001 / 120</span>
+            <label class="sr-only" for="playback-rate">播放速度</label><select id="playback-rate" aria-label="播放速度"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select>
+          </div>
+          <div class="trace-chart"><div><span>可见点误差 / px</span><span>点击曲线区域跳转到对应帧</span></div><canvas id="trace-chart" width="1000" height="125" aria-label="当前片段每帧的 FBF 和 PCH 可见点平均误差曲线"></canvas></div>
+        </div>
+        <aside class="explorer-panel">
+          <div class="panel-title">VIEW CONTROLS <span>↗</span></div>
+          <div class="control-group"><h3>器械</h3><div class="instrument-options" role="group" aria-label="显示器械"><button class="selected" data-tool="both">双器械</button><button data-tool="FBF">FBF</button><button data-tool="PCH">PCH</button></div></div>
+          <div class="control-group overlay-options"><h3>叠加图层</h3><label><span><i class="legend-dot prediction"></i>关键点预测</span><input id="show-prediction" type="checkbox" checked></label><label><span><i class="legend-cross"></i>Ground truth</span><input id="show-gt" type="checkbox" checked></label><label><span><i class="legend-trail"></i>钳尖轨迹尾迹</span><input id="show-trails" type="checkbox" checked></label><label><span>关键点名称</span><input id="show-labels" type="checkbox"></label><label><span>GT 器械框</span><input id="show-boxes" type="checkbox"></label></div>
+          <div class="frame-metric"><span>当前帧 · 可见点平均误差</span><strong id="current-error">— <small>px</small></strong><div><span><i class="legend-dot fbf"></i> FBF <b id="fbf-error">—</b></span><span><i class="legend-dot pch"></i> PCH <b id="pch-error">—</b></span></div></div>
+          <dl class="clip-details"><div><dt>样本帧号</dt><dd id="source-frame">—</dd></div><div><dt>重放帧率</dt><dd>12 FPS</dd></div><div><dt>轨迹坐标系</dt><dd>二维图像</dd></div></dl>
+          <a id="download-clip" class="button download-button" href="assets/video/steady-overlay.mp4" download>下载叠加视频 <span>↓</span></a>
+          <p class="panel-footnote">按文件帧号排序的预测重放。播放速度不代表原始采集时间；尾迹连接相邻帧预测，未使用时序滤波。</p>
+        </aside>
+      </div>
+      <p class="viewer-caption"><span class="caption-index">↳ 关于展示</span>片段依据连续窗口的误差分位选择，包含相对稳定、典型和困难情况。页面全部指标来自完整有效测试集，而非展示片段。<a href="data/clips.json" download>片段来源与选择规则 ↗</a></p>
+    </section>
+
+    <section id="results" class="results-section section-width">
+      <div class="section-heading"><div><div class="eyebrow">02 / MEASURED, NOT ASSUMED</div><h2>让结果说明问题。</h2></div><a class="text-link" href="downloads/report_zh.md" download>下载完整分析报告 ↓</a></div>
+      <div class="results-layout">
+        <div class="results-table-wrap"><table><caption>最佳模型 · 可见关键点 · 原图像素</caption><thead><tr><th>集合 / 器械</th><th>平均误差</th><th>PCK@5</th><th>PCK@10</th></tr></thead><tbody id="results-body"><tr><td colspan="4">载入完整实验指标…</td></tr></tbody></table><p class="table-note">PCK@5 / @10：误差不超过 5 / 10 个原图像素的可见点比例。使用 GT 框，尚未计入检测器误差。</p></div>
+        <div class="finding-card"><div class="finding-tag">THE GENERALIZATION GAP</div><strong>6.87 <span>→</span> 27.92<span class="finding-unit">px</span></strong><p class="finding-subtitle">验证集 → 独立操作场景测试集</p><div class="finding-rule"></div><p>模型已经学会训练场景中的定位；新的组织背景、朝向与遮挡仍会产生明显失配。</p><p>PCH 可见点的中位误差为 <b>7.60px</b>，同时有 <b>22.6%</b> 的可见点误差超过 50px。单一均值无法描述全部表现。</p><span class="finding-bottom">A BASELINE FOR THE NEXT EXPERIMENT <span>↗</span></span></div>
+      </div>
+      <div class="figure-tabs" role="tablist" aria-label="实验图表"><button role="tab" aria-selected="true" data-chart="learning_curves">训练曲线</button><button role="tab" aria-selected="false" data-chart="per_joint_errors">逐关键点误差</button><button role="tab" aria-selected="false" data-chart="test_error_cdf">测试误差分布</button></div>
+      <figure class="chart-figure"><img id="results-chart" src="assets/charts/learning_curves.png" alt="训练损失、验证误差和 PCK 随 epoch 变化的曲线" loading="lazy"><figcaption id="chart-caption">第 27 epoch 获得最佳验证误差。此后训练损失继续下降，验证表现基本停滞。</figcaption></figure>
+    </section>
+
+    <section class="failure-section section-width"><div class="section-heading"><div><div class="eyebrow">03 / KEEP THE DIFFICULT FRAMES</div><h2>失配，也属于实验结果。</h2></div><p>红色为标注，绿色为预测。<br>每类展示中位、P90 和最差实例。</p></div><a class="failure-image" href="assets/images/qualitative_test.jpg" target="_blank"><img src="assets/images/qualitative_test.jpg" alt="FBF 与 PCH 的测试中位、P90 和最差案例，展示真实预测与标注的偏差" loading="lazy"><span>打开原尺寸图 ↗</span></a></section>
+
+    <section id="method" class="method-section section-width"><div><div class="eyebrow">04 / WHAT THIS EXPERIMENT DOES</div><h2>清楚记录方法，<br>也清楚记录边界。</h2><a class="text-link" href="https://forge.coreweave.com/wandb/xu-wang-23/crcd-vitpose-plus/runs/srjp103z" target="_blank" rel="noopener">查看原始训练记录 ↗</a></div><div class="method-notes"><article><span>01</span><div><h3>预训练到器械关键点</h3><p>加载 ViTPose++-Base 预训练权重，保留共享编码器与解码器。新增两个器械专家，分别输出 FBF 五点与 PCH 八点。</p></div></article><article><span>02</span><div><h3>逐帧预测的时序展示</h3><p>此处“轨迹”由连续帧的二维关键点估计连接而成。器械框和身份来自标注；未训练独立时序跟踪模块，也未评估 IDF1、HOTA 或遮挡恢复。</p></div></article><article><span>03</span><div><h3>完整有效测试集</h3><p>FBF_E_1 与 PCH_E_1 共 6,669 个原始实例，520 个无有效关键点或退化框实例被加载器排除。剩余 6,149 个实例用于测试。</p></div></article><article><span>04</span><div><h3>待解决的问题</h3><p>独立场景存在明显长尾失配。PCH 的一个点在测试集没有可见标注，完整八点泛化尚未得到验证；当前结果不包含三维位姿或双目视差。</p></div></article></div></section>
+
+    <section class="resources section-width"><div><span class="eyebrow">OPEN THE NOTEBOOK</span><h2>复核、比较，再继续。</h2></div><div class="resource-links"><a href="https://github.com/MichaelWangGo/crcd-instrument-keypoints" target="_blank" rel="noopener">GitHub 源码 <span>↗</span></a><a href="https://forge.coreweave.com/wandb/xu-wang-23/crcd-vitpose-plus/runs/2cx0caf6" target="_blank" rel="noopener">W&B 完整分析 <span>↗</span></a><a href="downloads/per_joint.csv" download>逐关键点数据 CSV <span>↓</span></a><a href="downloads/summary.json" download>实验汇总 JSON <span>↓</span></a></div></section>
+  </main>
+  <footer class="site-footer section-width"><div><a class="brand" href="./">instrument<span class="brand-light">pose</span></a><p>MichaelWangGo · CRCD research visualization · 2026</p></div><p>数据与图像来自 <a href="https://github.com/SITL-Eng/CRCD" target="_blank" rel="noopener">CRCD</a>，作者 Ki-Hwan Oh、Leonardo Borgioli 等。<br>图像经裁切、缩放和预测叠加，按 <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> 使用。<a href="credits.html">来源与许可 ↗</a></p></footer>
+</body>
+</html>

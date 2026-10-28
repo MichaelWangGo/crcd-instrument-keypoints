@@ -1,0 +1,236 @@
+{
+  "train": {
+    "FBF": {
+      "instances": 2986,
+      "skipped": 0,
+      "visible": 14439,
+      "outside_crop": 0,
+      "outside_bbox": 649,
+      "error_floor_sum": 1.0265933477135182e-09,
+      "per_joint": {
+        "Head": [
+          2919,
+          0
+        ],
+        "Edge": [
+          2971,
+          0
+        ],
+        "Center": [
+          2956,
+          0
+        ],
+        "TipLeft": [
+          2736,
+          0
+        ],
+        "TipRight": [
+          2857,
+          0
+        ]
+      },
+      "outside_crop_fraction": 0.0,
+      "mean_unavoidable_error_px": 7.109864586976371e-14
+    },
+    "PCH": {
+      "instances": 2000,
+      "skipped": 0,
+      "visible": 10677,
+      "outside_crop": 0,
+      "outside_bbox": 172,
+      "error_floor_sum": 7.510876403602359e-10,
+      "per_joint": {
+        "LeftScrewBottom": [
+          957,
+          0
+        ],
+        "LeftScrewTop": [
+          966,
+          0
+        ],
+        "CentralScrew": [
+          1786,
+          0
+        ],
+        "StartHook": [
+          1852,
+          0
+        ],
+        "CentralHook": [
+          1677,
+          0
+        ],
+        "TipHook": [
+          1647,
+          0
+        ],
+        "RightScrewTop": [
+          953,
+          0
+        ],
+        "RightScrewBottom": [
+          839,
+          0
+        ]
+      },
+      "outside_crop_fraction": 0.0,
+      "mean_unavoidable_error_px": 7.034631828793068e-14
+    }
+  },
+  "val": {
+    "FBF": {
+      "instances": 601,
+      "skipped": 0,
+      "visible": 2964,
+      "outside_crop": 0,
+      "outside_bbox": 149,
+      "error_floor_sum": 1.7022311290176299e-10,
+      "per_joint": {
+        "Head": [
+          587,
+          0
+        ],
+        "Edge": [
+          594,
+          0
+        ],
+        "Center": [
+          601,
+          0
+        ],
+        "TipLeft": [
+          581,
+          0
+        ],
+        "TipRight": [
+          601,
+          0
+        ]
+      },
+      "outside_crop_fraction": 0.0,
+      "mean_unavoidable_error_px": 5.7430200034333e-14
+    },
+    "PCH": {
+      "instances": 3743,
+      "skipped": 0,
+      "visible": 21239,
+      "outside_crop": 0,
+      "outside_bbox": 341,
+      "error_floor_sum": 1.516179541385906e-09,
+      "per_joint": {
+        "LeftScrewBottom": [
+          3488,
+          0
+        ],
+        "LeftScrewTop": [
+          3475,
+          0
+        ],
+        "CentralScrew": [
+          3468,
+          0
+        ],
+        "StartHook": [
+          3473,
+          0
+        ],
+        "CentralHook": [
+          3556,
+          0
+        ],
+        "TipHook": [
+          3729,
+          0
+        ],
+        "RightScrewTop": [
+          30,
+          0
+        ],
+        "RightScrewBottom": [
+          20,
+          0
+        ]
+      },
+      "outside_crop_fraction": 0.0,
+      "mean_unavoidable_error_px": 7.138657852939903e-14
+    }
+  },
+  "test": {
+    "FBF": {
+      "instances": 2892,
+      "skipped": 369,
+      "visible": 7088,
+      "outside_crop": 0,
+      "outside_bbox": 698,
+      "error_floor_sum": 3.597911063242649e-10,
+      "per_joint": {
+        "Head": [
+          318,
+          0
+        ],
+        "Edge": [
+          414,
+          0
+        ],
+        "Center": [
+          1044,
+          0
+        ],
+        "TipLeft": [
+          2464,
+          0
+        ],
+        "TipRight": [
+          2848,
+          0
+        ]
+      },
+      "outside_crop_fraction": 0.0,
+      "mean_unavoidable_error_px": 5.076059626471006e-14
+    },
+    "PCH": {
+      "instances": 3257,
+      "skipped": 151,
+      "visible": 16171,
+      "outside_crop": 0,
+      "outside_bbox": 412,
+      "error_floor_sum": 1.3296378769365557e-09,
+      "per_joint": {
+        "LeftScrewBottom": [
+          1971,
+          0
+        ],
+        "LeftScrewTop": [
+          2241,
+          0
+        ],
+        "CentralScrew": [
+          2686,
+          0
+        ],
+        "StartHook": [
+          3201,
+          0
+        ],
+        "CentralHook": [
+          3231,
+          0
+        ],
+        "TipHook": [
+          2823,
+          0
+        ],
+        "RightScrewTop": [
+          18,
+          0
+        ],
+        "RightScrewBottom": [
+          0,
+          0
+        ]
+      },
+      "outside_crop_fraction": 0.0,
+      "mean_unavoidable_error_px": 8.222360255621518e-14
+    }
+  }
+}

@@ -1,0 +1,4 @@
+.qa/
+__pycache__/
+qa-results/
+publication.json
